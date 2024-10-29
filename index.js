@@ -10,7 +10,7 @@ dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json())
-
+#
 const db = new pg.Client({
   user:process.env.DB_User,
   host:process.env.DB_Host,
