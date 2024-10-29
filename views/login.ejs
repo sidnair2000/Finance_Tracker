@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>login page</h1>
+    <form action="/submit" method="POST">
+        <div>
+            <label for="username">Name:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div>
+            <button type="submit" name="action" value="add_expense">Add Expense</button>
+            <button type="submit" name="action" value="summarise">Summarise</button>
+          </div>
+    </form>
+</body>
+</html>
