@@ -2,6 +2,8 @@ import express from "express"
 import pg from "pg"
 import bodyParser from "body-parser";
 import dotenv from 'dotenv';
+import {exec} from 'child_process'
+import fs from 'fs'
 // import { database, password } from "pg/lib/defaults";
 
 const app = express();
@@ -37,6 +39,40 @@ app.get("/add_expense",(req,res)=>{
     res.render("add_expense.ejs")
 })
 
+app.get("/summarise",(req,res)=>{
+    const outputFileName = 'plot.png';
+
+  // Run the R script and pass the output file name as an argument
+  exec(`Rscript plot_script.R ${outputFileName}`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing R script: ${error.message}`);
+      return res.status(500).send(`Error: ${error.message}`);
+    }
+    if (stderr) {
+      console.error(`stderr: ${stderr}`);
+    }
+
+    // Check if the file was created and send it as a response
+    fs.access(outputFileName, fs.constants.F_OK, (err) => {
+      if (err) {
+        return res.status(500).send("Plot image could not be generated.");
+      }
+
+      // Send the generated plot image as a response
+      res.sendFile(outputFileName, { root: process.cwd() }, (err) => {
+        if (err) {
+          console.error(`Error sending file: ${err}`);
+        } else {
+          // Optionally delete the file after sending
+          fs.unlink(outputFileName, (err) => {
+            if (err) console.error(`Error deleting file: ${err}`);
+          });
+        }
+      });
+    });
+  });
+})
+
 app.post("/register",async (req,res)=>{
     const username = req.body.username;
     const password = req.body.password;
@@ -45,31 +81,10 @@ app.post("/register",async (req,res)=>{
     const result = await db.query(
         "Insert into users(email,password) VALUES($1,$2)",[username,password]
       );
-    // console.log(result)
     res.redirect("/")
 }
 )
 
-// app.post("/submit",async (req,res)=>{
-//     const username = req.body.username;
-//     const password = req.body.password;
-//     const action = req.body.action;
-//     // console.log(username);
-//     // console.log(password);
-//     const result = await db.query(
-//         "select * from users where email=$1 and password=$2",[username,password]
-//       );
-//     if(result.rows.length>0){
-//         if(action=='summarise'){
-//             res.redirect("You clicked on summarise")
-//         }else if(action=="add_expense"){
-//             res.redirect("/add_expense")
-//         }
-//     }else{
-//         res.send("User does not exist")
-//     }
-// }
-// )
 
 
 app.post("/submit",async (req,res)=>{
@@ -87,7 +102,7 @@ app.post("/submit",async (req,res)=>{
         const password = req.body.password;
         const result = await db.query("select * from users where email=$1 and password=$2",[username,password]);
         if(result.rows.length>0){
-            res.redirect("/add_expense")
+            res.redirect("/summarise")
         }
     } else if(action=='insert'){
         const username = req.body.username;
