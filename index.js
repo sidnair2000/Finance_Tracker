@@ -23,6 +23,8 @@ const db = new pg.Client({
 
 db.connect()
 
+let username_r;
+
 app.get("/",(req,res)=>{
     res.render("index.ejs")
 })
@@ -41,7 +43,7 @@ app.get("/add_expense",(req,res)=>{
 
 app.get("/summarise",(req,res)=>{
     const outputFileName = 'plot.png';
-    const username = "a"
+    const username = username_r
 
   // Run the R script and pass the output file name as an argument
   exec(`Rscript plot_script.R ${outputFileName} ${username}`, (error, stdout, stderr) => {
@@ -101,6 +103,7 @@ app.post("/submit",async (req,res)=>{
     }else if(action=='summarise'){
         const username = req.body.username;
         const password = req.body.password;
+        username_r = username
         const result = await db.query("select * from users where email=$1 and password=$2",[username,password]);
         if(result.rows.length>0){
             res.redirect("/summarise")
