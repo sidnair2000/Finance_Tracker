@@ -41,9 +41,10 @@ app.get("/add_expense",(req,res)=>{
 
 app.get("/summarise",(req,res)=>{
     const outputFileName = 'plot.png';
+    const username = "a"
 
   // Run the R script and pass the output file name as an argument
-  exec(`Rscript plot_script.R ${outputFileName}`, (error, stdout, stderr) => {
+  exec(`Rscript plot_script.R ${outputFileName} ${username}`, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing R script: ${error.message}`);
       return res.status(500).send(`Error: ${error.message}`);
