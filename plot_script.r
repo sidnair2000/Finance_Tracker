@@ -54,7 +54,8 @@ if (!is.null(con)) {
 plot <- result %>%
   ggplot(aes(x = month, y = cost)) +
   geom_point(color = "blue") +
-  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  geom_line() +
+  facet_wrap(~year)+
   labs(title = "Monthwise Expenses",
        x = "Month",
        y = "Expenses") +
