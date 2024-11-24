@@ -42,6 +42,11 @@ app.get("/add_expense",(req,res)=>{
     res.render("add_expense.ejs")
 })
 
+app.get('/health', (req, res) => {
+  res.status(200).send('Healthy');
+});
+
+
 app.get("/summarise",(req,res)=>{
     const outputFileName = 'plot.png';
     const username = username_r
