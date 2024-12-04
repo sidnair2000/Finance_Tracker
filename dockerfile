@@ -9,17 +9,17 @@ RUN apt-get update && apt-get install -y \
 # Verify installation of R and Rscript
 RUN R --version && Rscript --version
 
-# Set the working directory
+# Set the working directory for the app
 WORKDIR /usr/src/app
 
 # Copy package.json and install Node.js dependencies
-COPY package.json ./
+COPY package.json ./      
 RUN npm install
 
 # Copy the rest of the application files
-COPY . .
+COPY . .     
 
-# Expose port 8080 for the web server
+# Expose the port your app runs on (default for Node.js is 8080)
 EXPOSE 8080
 
 # Start the Node.js app
