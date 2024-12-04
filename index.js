@@ -41,7 +41,6 @@ app.get("/signup",(req,res)=>{
 app.get("/add_expense",(req,res)=>{
     res.render("add_expense.ejs")
 })
-
 app.get('/health', (req, res) => {
   res.status(200).send('Healthy');
 });
