@@ -1,28 +1,26 @@
-# Use a base image with Node.js 20
+# Use Node.js base image
 FROM node:20-bullseye
 
-# Install R and any required libraries
+# Install R and necessary dependencies
 RUN apt-get update && apt-get install -y \
     r-base \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    libxml2-dev \
-    && rm -rf /var/lib/apt/lists/*  # Clean up apt cache to reduce image size
+    && rm -rf /var/lib/apt/lists/*
+
+# Verify installation of R and Rscript
+RUN R --version && Rscript --version
 
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json (if present)
-COPY package*.json ./
-
-# Install Node.js dependencies
+# Copy package.json and install Node.js dependencies
+COPY package.json ./
 RUN npm install
 
-# Copy the rest of the application files (including R scripts)
+# Copy the rest of the application files
 COPY . .
 
-# Expose the port your app runs on (default for Node.js is 3000)
+# Expose port 8080 for the web server
 EXPOSE 8080
 
-# Start the application
+# Start the Node.js app
 CMD ["node", "index.js"]
