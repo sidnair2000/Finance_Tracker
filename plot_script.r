@@ -1,3 +1,9 @@
+install.packages('tidyverse', repos='https://cloud.r-project.org')
+install.packages('DBI', repos='https://cloud.r-project.org')
+install.packages('RPostgres', repos='https://cloud.r-project.org')
+install.packages('dotenv', repos='https://cloud.r-project.org')
+
+
 library(tidyverse)
 library(DBI)
 library(RPostgres)
