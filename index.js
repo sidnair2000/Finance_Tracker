@@ -13,6 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json())
 
+
+
 const db = new pg.Client({
   user:process.env.DB_User,
   host:process.env.DB_Host,
@@ -23,6 +25,8 @@ const db = new pg.Client({
 })
 
 db.connect()
+  .then(() => console.log('Connected to the database'))
+  .catch(err => console.error('Connection error:', err));
 
 let username_r;
 
